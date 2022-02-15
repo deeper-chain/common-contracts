@@ -10,3 +10,6 @@ artifacts
 
 .idea
 .vscode
+.gitsecret/keys/random_seed
+!*.secret
+secrets.json
