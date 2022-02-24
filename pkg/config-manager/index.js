@@ -24,21 +24,6 @@ module.exports = class ConfigManager {
     this._set(desc, undefined, undefined)
   }
   
-  _formEnv (str) {
-    if (str === '*' || str.includes('.')) {
-      let names = str.split('.')
-      if (names.length !== this._schema.length) {
-        return false
-      }
-      while (names.length > 1 && names[names.length - 1] === '*') {
-        names.pop()
-      }
-      return names.join('.')
-    } else {
-      return false
-    }
-  }
-  
   _set (desc, env, names) {
     if (env != null) {
       if (names != null) {
@@ -61,7 +46,7 @@ module.exports = class ConfigManager {
         if (theEnv !== false) {
           this._set(v, theEnv, names)
         } else {
-          this._set(v, undefined, [...names,k])
+          this._set(v, undefined, [...names, k])
         }
       }
       return
@@ -91,6 +76,23 @@ module.exports = class ConfigManager {
       }
     }
     
+  }
+  
+  _formEnv (str) {
+    if (str === '*') {
+      return ['*']
+    } else if (str.includes('.')) {
+      let names = str.split('.')
+      if (names.length !== this._schema.length) {
+        return false
+      }
+      while (names.length > 1 && names[names.length - 1] === '*') {
+        names.pop()
+      }
+      return names.join('.')
+    } else {
+      return false
+    }
   }
   
   get (env) {

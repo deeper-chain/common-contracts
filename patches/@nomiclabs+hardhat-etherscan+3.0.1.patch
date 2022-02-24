@@ -1,0 +1,60 @@
+diff --git a/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js b/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js
+index 97c3808..21c2e33 100644
+--- a/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js
++++ b/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js
+@@ -10,6 +10,13 @@ exports.chainConfig = {
+             browserURL: "https://etherscan.io",
+         },
+     },
++    deeper_dev: {
++        chainId: 518,
++        urls: {
++            apiURL: "http://blockscount-dev.deeper.network/api",
++            browserURL: "http://blockscount-dev.deeper.network",
++        },
++    },
+     ropsten: {
+         chainId: 3,
+         urls: {
+diff --git a/node_modules/@nomiclabs/hardhat-etherscan/src/ChainConfig.ts b/node_modules/@nomiclabs/hardhat-etherscan/src/ChainConfig.ts
+index 9ba8ca6..0cfc227 100644
+--- a/node_modules/@nomiclabs/hardhat-etherscan/src/ChainConfig.ts
++++ b/node_modules/@nomiclabs/hardhat-etherscan/src/ChainConfig.ts
+@@ -16,6 +16,13 @@ export const chainConfig: ChainConfig = {
+       browserURL: "https://ropsten.etherscan.io",
+     },
+   },
++  deeper_dev: {
++    chainId: 518,
++    urls: {
++      apiURL: "http://blockscount-dev.deeper.network/api",
++      browserURL: "http://blockscount-dev.deeper.network",
++    },
++  },
+   rinkeby: {
+     chainId: 4,
+     urls: {
+diff --git a/node_modules/@nomiclabs/hardhat-etherscan/src/config.ts b/node_modules/@nomiclabs/hardhat-etherscan/src/config.ts
+index f50b31a..0feac98 100644
+--- a/node_modules/@nomiclabs/hardhat-etherscan/src/config.ts
++++ b/node_modules/@nomiclabs/hardhat-etherscan/src/config.ts
+@@ -13,6 +13,8 @@ const verifyAllowedChains = (etherscanConfig: EtherscanConfig): string[] => {
+     return [];
+   }
+   
++  console.log(`etherscanConfig:`, etherscanConfig);
++  console.log(`chainConfig:`, chainConfig);
+   const allowed = Object.keys(chainConfig);
+   const actual = Object.keys(etherscanConfig.apiKey);
+ 
+diff --git a/node_modules/@nomiclabs/hardhat-etherscan/src/types.ts b/node_modules/@nomiclabs/hardhat-etherscan/src/types.ts
+index 4764cf8..e3f38c6 100644
+--- a/node_modules/@nomiclabs/hardhat-etherscan/src/types.ts
++++ b/node_modules/@nomiclabs/hardhat-etherscan/src/types.ts
+@@ -1,5 +1,6 @@
+ type Chain =
+   | "mainnet"
++  | "deeper_dev"
+   | "ropsten"
+   | "rinkeby"
+   | "goerli"

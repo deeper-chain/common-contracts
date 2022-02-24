@@ -6,6 +6,7 @@ const config = require('../config')
 // Runtime Environment's members available in the global scope.
 const hre = require('hardhat')
 const findOrDeploy = require('../logic/findOrDeploy')
+const logRemindWriteDownConfig = require('../logic/logRemindWriteDownConfig')
 
 async function main () {
   // Hardhat always runs the compile task when running scripts with its command
@@ -19,6 +20,15 @@ async function main () {
   const WDPR = await findOrDeploy('WDPR')
   
   console.log('WDPR deployed to:', WDPR.address)
+  
+  if(config.configPreset.env==='prod'){
+    console.log('verify on blockchain explorer')
+    await hre.run("verify:verify", {
+      address: WDPR.address
+    })
+  }
+  
+  logRemindWriteDownConfig({WDPR:WDPR.address})
 }
 
 // We recommend this pattern to be able to use async/await everywhere

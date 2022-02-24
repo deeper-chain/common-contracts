@@ -2,15 +2,19 @@
   "name": "wdpr",
   "version": "1.0.0",
   "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0",
     "config-manager": "file:pkg/config-manager",
-    "hardhat": "^2.8.4"
+    "hardhat": "^2.8.4",
+    "patch-package": "^6.4.7"
+  },
+  "scripts": {
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-etherscan": "^3.0.1",
     "@nomiclabs/hardhat-waffle": "^2.0.2",
     "chai": "^4.3.6",
-
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.4",
     "hardhat-gas-reporter": "^1.0.7",

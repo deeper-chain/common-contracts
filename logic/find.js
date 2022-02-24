@@ -1,6 +1,6 @@
 const config = require('../config')
 const { ethers } = require('hardhat')
-module.exports = async function(name, ...deployArgs) {
+module.exports = async function(name) {
   const ContractFactory = await ethers.getContractFactory(name)
   let contract
   if (config.deployed[name]) {
@@ -8,10 +8,10 @@ module.exports = async function(name, ...deployArgs) {
     
     console.log(`Found ${name} at:`, contract.address)
   } else {
-    contract = await ContractFactory.deploy(...deployArgs)
-    
-    console.log(`Deployed ${name} at:`, contract.address)
-    
+    console.error(`Cannot find ${name} at:`, contract.address)
+    console.error(`Check \`deployed.${name}\` field of config`)
+  
+    throw new Error(`Cannot find ${name} at: ${contract.address}`)
   }
   return contract
 }
