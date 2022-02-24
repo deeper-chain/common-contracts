@@ -32,9 +32,11 @@ const hardhat = {
       url: `https://mainnet-dev.deeper.network/rpc`,
       accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
     },
-    deeper: {
-      url: `https://mainnet-deeper-chain.deeper.network/rpc`,
-      accounts: [secrets?.deployer?.privateKey]
+    ...secrets?.deployer && {
+      deeper: {
+        url: `https://mainnet-deeper-chain.deeper.network/rpc`,
+        accounts: [secrets?.deployer?.privateKey]
+      }
     }
   },
   gasReporter: {
@@ -49,7 +51,6 @@ const hardhat = {
 }
 
 configManager.set({
-  
   hardhat,
   deployed: {
     '*': {},
