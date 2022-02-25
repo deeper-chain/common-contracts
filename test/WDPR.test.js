@@ -10,6 +10,20 @@ const { ethers } = hre
 
 const { expect } = require('chai')
 
+describe("transfer", async () => {
+  let [deployer] = await ethers.getSigners()
+  console.log(`network:`, await deployer.provider.getNetwork())
+  console.log(`deployer.address:`, deployer.address)
+  console.log(`deployer.balance:`, await deployer.getBalance())
+  
+  let tx=await deployer.sendTransaction({to: ethers.constants.AddressZero,value: ethers.utils.parseEther('10')})
+  await tx.wait()
+  
+  expect(await deployer.provider.getBalance(ethers.constants.AddressZero))
+    .to
+    .equal(ethers.utils.parseEther('10'))
+})
+
 describe('WDPR basic', function() {
   let wdpr
   let deployer

@@ -1,3 +1,6 @@
+# 项目文档
+https://www.notion.so/WDPR-Web3-317eaab0c77f4abcbbdff8cfdbf735f3
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.

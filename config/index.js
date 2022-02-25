@@ -9,7 +9,7 @@ try {
 const configPreset = {
   product: process.env.CONFIG_PRODUCT || 'main', // main: product name
   env: process.env.CONFIG_ENV || 'dev', // dev: on development; prod: for production use
-  deploy: process.env.CONFIG_NETWORK || 'deeper_dev' // local: deploy to local; [chainName]: deploy to chain
+  deploy: process.env.CONFIG_DEPLOY || 'deeper_dev' // local: deploy to local; [chainName]: deploy to chain
 }
 
 const configManager = new ConfigManager()
@@ -30,6 +30,10 @@ const hardhat = {
   networks: {
     deeper_dev: {
       url: `https://mainnet-dev.deeper.network/rpc`,
+      accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
+    },
+    moonbase_dev: {
+      url: `https://rpc.api.moonbase.moonbeam.network`,
       accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
     },
     ...secrets?.deployer && {
@@ -55,13 +59,14 @@ configManager.set({
   deployed: {
     '*': {},
     'main.dev.deeper_dev': {
-      WDPR: '0x5C24cc1A8089149E9Cb86d2E719C2720BcE4458D'
+      WDPR: '0x070BAfcd6605eDC70bD2CA00288e52f94CE0F106',
+      AcceptDPRAsWDPR: '0x0cc9df8F5a950C7b689Dc412F04A3411d222cD5b'
     },
     'main.dev.deeper': {
       WDPR: '0x3cfE156371057a968788F54D65B70502A691Be76'
     },
     'main.prod.deeper_dev': {
-      WDPR: '0x6ed17De6Ee3Eb158B478Ca88e133B7FbE97370ab'
+      WDPR: ''
     },
     'main.prod.deeper': {
       WDPR: '0x3cfE156371057a968788F54D65B70502A691Be76'

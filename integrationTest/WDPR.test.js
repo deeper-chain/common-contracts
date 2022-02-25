@@ -11,6 +11,12 @@ const { expect } = require('chai')
 
 const findOrDeploy = require('../logic/findOrDeploy')
 
+
+let p = { p: Promise.resolve() };
+// put this line with a breakpoint as async breakpoint
+// usage: assign a promise to p.p and step over
+// while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
+
 describe('WDPR integration test', function() {
   let wdpr
   let acceptDPRAsWDPR
@@ -33,15 +39,16 @@ describe('WDPR integration test', function() {
     
     console.log(`deployer.address:`, deployer.address)
     console.log(`deployer.balance:`, await deployer.getBalance())
-    
+    deployer.trans
     wdpr = await findOrDeploy('WDPR')
     acceptDPRAsWDPR = await findOrDeploy('AcceptDPRAsWDPR', wdpr.address)
   })
+  
   it('Should deposit', async function() {
     expect(await wdpr.symbol()).to.equal('WDPR')
     
     let oldBalance = await wdpr.balanceOf(deployer.address)
-    let tx = await wdpr.deposit({ value: ethers.utils.parseUnits('100', 'gwei') })
+    let tx = await wdpr.deposit({ value: ethers.utils.parseUnits('1', 'ether') })
     
     // wait until the transaction is mined
     await tx.wait()
@@ -49,19 +56,24 @@ describe('WDPR integration test', function() {
     
     expect(newBalance.sub(oldBalance))
       .to
-      .equal(ethers.utils.parseUnits('100', 'gwei'))
+      .equal(ethers.utils.parseUnits('1', 'ether'))
   })
   it('Should accept WDPR', async function() {
-    
-    let tx = await wdpr.approve(acceptDPRAsWDPR.address, ethers.utils.parseUnits('5', 'gwei'))
+  
+    while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
+    let tx = await wdpr.approve(acceptDPRAsWDPR.address, ethers.utils.parseUnits('0.2', 'ether'))
     await tx.wait()
     
-    tx = await acceptDPRAsWDPR.acceptWDPR(ethers.utils.parseUnits('5', 'gwei'))
+    tx = await acceptDPRAsWDPR.acceptWDPR(ethers.utils.parseUnits('0.2', 'ether'))
     await tx.wait()
   })
   it('Should accept DPR', async function() {
     
-    let tx = await acceptDPRAsWDPR.acceptDPR({ value: ethers.utils.parseUnits('5', 'gwei') })
+    let tx = await acceptDPRAsWDPR.acceptDPR({ value: ethers.utils.parseUnits('0.2', 'ether') })
     await tx.wait()
+  
+    tx = await deployer.sendTransaction({to: acceptDPRAsWDPR.address,value: ethers.utils.parseUnits('0.2', 'ether')})
+    await tx.wait()
+    
   })
 })

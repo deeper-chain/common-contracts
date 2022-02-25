@@ -21,6 +21,15 @@ contract AcceptDPRAsWDPR {
         require(newBalance == oldBalance + _amountIn, "require newBalance = oldBalance + _amountIn");
     }
 
+    receive() external payable {
+        uint256 oldBalance = wdpr.balanceOf(address(this));
+        wdpr.deposit{value : msg.value}();
+        uint256 newBalance = wdpr.balanceOf(address(this));
+        console.log("received DPR as WDPR: %d", msg.value);
+
+        require(newBalance == oldBalance + msg.value, "require newBalance = oldBalance + msg.value");
+    }
+
     function acceptDPR() public payable {
         uint256 oldBalance = wdpr.balanceOf(address(this));
         wdpr.deposit{value : msg.value}();
