@@ -64,8 +64,7 @@ describe('WDPR integration test', function() {
   it('Should accept WDPR', async function() {
   
     while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
-    let tx = await wdpr.approve(acceptDPRAsWDPR.address, ethers.utils.parseUnits('0.2', 'ether'))
-    await tx.wait()
+    let tx = await wdpr.approve(acceptDPRAsWDPR.address, ethers.utils.parseUnits('0.2', 'ether'), { gasLimit: 5000000 })
     
     tx = await acceptDPRAsWDPR.acceptWDPR(ethers.utils.parseUnits('0.2', 'ether'))
     await tx.wait()
@@ -73,7 +72,6 @@ describe('WDPR integration test', function() {
   it('Should accept DPR', async function() {
     
     let tx = await acceptDPRAsWDPR.acceptDPR({ value: ethers.utils.parseUnits('0.2', 'ether') })
-    await tx.wait()
   
     tx = await deployer.sendTransaction({to: acceptDPRAsWDPR.address,value: ethers.utils.parseUnits('0.2', 'ether')})
     await tx.wait()
@@ -81,14 +79,15 @@ describe('WDPR integration test', function() {
   })
   it('Should work with transferFromCaller', async function() {
   
-    let oldBalance=await wdpr.balanceOf(acceptDPRAsWDPR.address)
-    let tx = await wdpr.approve(transferFromCaller.address, ethers.utils.parseUnits('0.2', 'ether'))
+    let oldBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    let tx = await wdpr.approve(transferFromCaller.address, ethers.utils.parseUnits('0.2', 'ether'), { gasLimit: 5000000 })
+  
+    tx = await transferFromCaller.transferFromTest(ethers.utils.parseUnits('0.2', 'ether'), acceptDPRAsWDPR.address, { gasLimit: 5000000 })
     await tx.wait()
   
-    tx = await transferFromCaller.transferFromTest(ethers.utils.parseUnits('0.2', 'ether'), acceptDPRAsWDPR.address)
-    await tx.wait()
-    
-    let newBalance= await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    let newBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    newBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
+  
     expect(newBalance.sub(oldBalance))
       .to
       .equal(ethers.utils.parseUnits('0.2', 'ether'))

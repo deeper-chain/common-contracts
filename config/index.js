@@ -61,7 +61,8 @@ configManager.set({
     '*': {},
     'main.dev.deeper_dev': {
       WDPR: '0x070BAfcd6605eDC70bD2CA00288e52f94CE0F106',
-      AcceptDPRAsWDPR: '0x0cc9df8F5a950C7b689Dc412F04A3411d222cD5b'
+      AcceptDPRAsWDPR: '0x0cc9df8F5a950C7b689Dc412F04A3411d222cD5b',
+      TransferFromCaller: '0x6e76946d784eb7C9a27f4151803168a7d64B1ef3'
     },
     'main.dev.deeper': {
       WDPR: '0x3cfE156371057a968788F54D65B70502A691Be76'

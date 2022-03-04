@@ -4,6 +4,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
     "config-manager": "file:pkg/config-manager",
+    "deploy-eip-1820": "^1.0.0",
     "hardhat": "^2.8.4",
     "patch-package": "^6.4.7"
   },
