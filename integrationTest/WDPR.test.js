@@ -20,6 +20,7 @@ let p = { p: Promise.resolve() };
 describe('WDPR integration test', function() {
   let wdpr
   let acceptDPRAsWDPR
+  let transferFromCaller
   let deployer
   let failed = false
   // Skip test if any prior test in this describe failed
@@ -42,6 +43,8 @@ describe('WDPR integration test', function() {
     deployer.trans
     wdpr = await findOrDeploy('WDPR')
     acceptDPRAsWDPR = await findOrDeploy('AcceptDPRAsWDPR', wdpr.address)
+    transferFromCaller = await findOrDeploy('TransferFromCaller', wdpr.address)
+  
   })
   
   it('Should deposit', async function() {
@@ -75,5 +78,19 @@ describe('WDPR integration test', function() {
     tx = await deployer.sendTransaction({to: acceptDPRAsWDPR.address,value: ethers.utils.parseUnits('0.2', 'ether')})
     await tx.wait()
     
+  })
+  it('Should work with transferFromCaller', async function() {
+  
+    let oldBalance=await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    let tx = await wdpr.approve(transferFromCaller.address, ethers.utils.parseUnits('0.2', 'ether'))
+    await tx.wait()
+  
+    tx = await transferFromCaller.transferFromTest(ethers.utils.parseUnits('0.2', 'ether'), acceptDPRAsWDPR.address)
+    await tx.wait()
+    
+    let newBalance= await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    expect(newBalance.sub(oldBalance))
+      .to
+      .equal(ethers.utils.parseUnits('0.2', 'ether'))
   })
 })

@@ -1,11 +1,18 @@
 diff --git a/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js b/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js
-index 97c3808..21c2e33 100644
+index 97c3808..60c854d 100644
 --- a/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js
 +++ b/node_modules/@nomiclabs/hardhat-etherscan/dist/src/ChainConfig.js
-@@ -10,6 +10,13 @@ exports.chainConfig = {
+@@ -10,6 +10,20 @@ exports.chainConfig = {
              browserURL: "https://etherscan.io",
          },
      },
++    deeper: {
++        chainId: 518,
++        urls: {
++            apiURL: "https://block-scout.deeper.network/api",
++            browserURL: "https://block-scout.deeper.network",
++        },
++    },
 +    deeper_dev: {
 +        chainId: 518,
 +        urls: {

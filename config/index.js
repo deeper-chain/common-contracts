@@ -49,7 +49,8 @@ const hardhat = {
   },
   etherscan: {
     apiKey: {
-      deeper_dev: 'placeholder'
+      deeper_dev: 'placeholder',
+      deeper: 'placeholder',
     }
   }
 }
@@ -66,10 +67,10 @@ configManager.set({
       WDPR: '0x3cfE156371057a968788F54D65B70502A691Be76'
     },
     'main.prod.deeper_dev': {
-      WDPR: ''
+      WDPR: '0x25dd87682d8BD4D0003f8E4DEF660599dfB3A33A'
     },
     'main.prod.deeper': {
-      WDPR: '0x3cfE156371057a968788F54D65B70502A691Be76'
+      WDPR: '0x234baf301C2975F5D2F20DD7875F3543b64b0B9c'
     }
   }
   
