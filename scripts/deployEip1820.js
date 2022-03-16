@@ -14,6 +14,13 @@ async function main () {
   let registryContract = await eip1820.deploy(deployer, ethers.utils.parseUnits('0.2', 'ether'))
   
   console.log('eip1820 deployed to:', registryContract.address)
+  
+  if (config.configPreset.env === 'prod') {
+    console.log('verify on blockchain explorer')
+    await hre.run("verify:verify", {
+      address: registryContract.address
+    })
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere

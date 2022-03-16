@@ -13,7 +13,9 @@ contract AcceptDPRAsWDPR {
         wdpr = _wdpr;
     }
     function acceptWDPR(uint256 _amountIn) public {
-        uint256 oldBalance = wdpr.balanceOf(address(this));
+        console.log("_amountIn: %d", _amountIn);
+
+    uint256 oldBalance = wdpr.balanceOf(address(this));
         SafeERC20.safeTransferFrom(IERC20(address(wdpr)), msg.sender, address(this), _amountIn);
         uint256 newBalance = wdpr.balanceOf(address(this));
         console.log("received WDPR: %d", _amountIn);

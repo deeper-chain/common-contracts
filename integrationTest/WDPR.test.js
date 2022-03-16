@@ -40,7 +40,7 @@ describe('WDPR integration test', function() {
     
     console.log(`deployer.address:`, deployer.address)
     console.log(`deployer.balance:`, await deployer.getBalance())
-    deployer.trans
+
     wdpr = await findOrDeploy('WDPR')
     acceptDPRAsWDPR = await findOrDeploy('AcceptDPRAsWDPR', wdpr.address)
     transferFromCaller = await findOrDeploy('TransferFromCaller', wdpr.address)
@@ -63,12 +63,17 @@ describe('WDPR integration test', function() {
   })
   it('Should accept WDPR', async function() {
   
-    while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
-    let tx = await wdpr.approve(acceptDPRAsWDPR.address, ethers.utils.parseUnits('0.2', 'ether'), { gasLimit: 5000000 })
-    
-    tx = await acceptDPRAsWDPR.acceptWDPR(ethers.utils.parseUnits('0.2', 'ether'))
-    await tx.wait()
+    try {
+      let tx = await wdpr.approve(acceptDPRAsWDPR.address, ethers.utils.parseUnits('0.2', 'ether'),{gasLimit: 5000000})
+      await tx.wait()
+      tx = await acceptDPRAsWDPR.acceptWDPR(ethers.utils.parseUnits('0.2', 'ether'))
+      await tx.wait()
+    }catch (e) {
+      while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
+  
+    }
   })
+  
   it('Should accept DPR', async function() {
     
     let tx = await acceptDPRAsWDPR.acceptDPR({ value: ethers.utils.parseUnits('0.2', 'ether') })
@@ -86,10 +91,43 @@ describe('WDPR integration test', function() {
     await tx.wait()
   
     let newBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
-    newBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
   
     expect(newBalance.sub(oldBalance))
       .to
       .equal(ethers.utils.parseUnits('0.2', 'ether'))
+  })
+  it('Should work with transferFromCaller, revert if more than approved', async function() {
+    
+    let oldBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    let tx = await wdpr.approve(transferFromCaller.address, ethers.utils.parseUnits('0.2', 'ether'), { gasLimit: 5000000 })
+    
+    let txProm  = transferFromCaller.transferFromTest(ethers.utils.parseUnits('0.201', 'ether'), acceptDPRAsWDPR.address, { gasLimit: 5000000 })
+    await expect(txProm).to.revertedWith('WDPR: request exceeds allowance')
+    
+    let newBalance = await wdpr.balanceOf(acceptDPRAsWDPR.address)
+    
+    expect(newBalance.sub(oldBalance))
+      .to
+      .equal(ethers.utils.parseUnits('0', 'ether'))
+  })
+  
+  it('Should withdraw', async function() {
+    
+    let oldBalance=await wdpr.balanceOf(deployer.address)
+    let tx = await wdpr.withdraw(oldBalance.div(2))
+    await tx.wait()
+    let newBalance = await wdpr.balanceOf(deployer.address)
+  
+    expect(newBalance.sub(oldBalance))
+      .to
+      .equal(oldBalance.div(2))
+  })
+  it('Should withdraw no more', async function() {
+  
+    let oldBalance = await wdpr.balanceOf(deployer.address)
+    let txProm = wdpr.withdraw(oldBalance.add(1))
+  
+    await expect(txProm).to.revertedWith('WDPR: withdraw amount exceeds balance')
+
   })
 })

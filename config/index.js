@@ -5,7 +5,7 @@ try {
   secrets = require('../secrets.json')
 } catch (e) {
 }
-
+process.env.CONFIG_DEPLOY = 'rinkeby'
 const configPreset = {
   product: process.env.CONFIG_PRODUCT || 'main', // main: product name
   env: process.env.CONFIG_ENV || 'dev', // dev: on development; prod: for production use
@@ -19,17 +19,34 @@ configManager.schema('product.env.deploy')
  */
 const hardhat = {
   solidity: {
-    version: "0.8.4",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
+    compilers: [
+      {
+        version: '0.8.4',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
+      },
+      {
+        version: '0.5.3',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
       }
-    }
+    ]
   },
   networks: {
     deeper_dev: {
       url: `https://mainnet-dev.deeper.network/rpc`,
+      accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
+    },
+    rinkeby: {
+      url: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
       accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
     },
     moonbase_dev: {
