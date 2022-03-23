@@ -4,6 +4,8 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
     "config-manager": "file:pkg/config-manager",
+    "ethcall": "^4.4.0",
+    "ethers-multicall": "^0.2.2",
     "hardhat": "^2.8.4",
     "patch-package": "^6.4.7"
   },

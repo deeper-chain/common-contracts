@@ -5,7 +5,8 @@ try {
   secrets = require('../secrets.json')
 } catch (e) {
 }
-process.env.CONFIG_DEPLOY = 'rinkeby'
+process.env.CONFIG_ENV = 'prod'
+process.env.CONFIG_DEPLOY = 'deeper'
 const configPreset = {
   product: process.env.CONFIG_PRODUCT || 'main', // main: product name
   env: process.env.CONFIG_ENV || 'dev', // dev: on development; prod: for production use
@@ -14,6 +15,11 @@ const configPreset = {
 
 const configManager = new ConfigManager()
 configManager.schema('product.env.deploy')
+
+const accounts={
+  mnemonic:'repeat vicious remind year country inform elevator sniff resource limb radio option',
+  initialIndex:1
+}
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
@@ -22,6 +28,15 @@ const hardhat = {
     compilers: [
       {
         version: '0.8.4',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
+      },
+      {
+        version: '0.8.12',
         settings: {
           optimizer: {
             enabled: true,
@@ -43,20 +58,20 @@ const hardhat = {
   networks: {
     deeper_dev: {
       url: `https://mainnet-dev.deeper.network/rpc`,
-      accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
+      accounts
     },
     rinkeby: {
       url: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-      accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
+      accounts
     },
     moonbase_dev: {
       url: `https://rpc.api.moonbase.moonbeam.network`,
-      accounts: ['bd8497e845b4dd6e7dec9e1f57590a513a247a534217e4fb0e931b95b77a1751']
+      accounts
     },
     ...secrets?.deployer && {
       deeper: {
         url: `https://mainnet-deeper-chain.deeper.network/rpc`,
-        accounts: [secrets?.deployer?.privateKey]
+        accounts: secrets?.deployer.HDWallet
       }
     }
   },
@@ -66,7 +81,7 @@ const hardhat = {
   },
   etherscan: {
     apiKey: {
-      deeper_dev: 'placeholder',
+//      deeper_dev: 'placeholder',
       deeper: 'placeholder',
     }
   }
@@ -82,7 +97,7 @@ configManager.set({
       TransferFromCaller: '0x6e76946d784eb7C9a27f4151803168a7d64B1ef3'
     },
     'main.dev.deeper': {
-      WDPR: '0x3cfE156371057a968788F54D65B70502A691Be76'
+      WDPR: '0x234baf301C2975F5D2F20DD7875F3543b64b0B9c'
     },
     'main.prod.deeper_dev': {
       WDPR: '0x25dd87682d8BD4D0003f8E4DEF660599dfB3A33A'

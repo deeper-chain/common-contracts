@@ -3,13 +3,15 @@ process.env.CONFIG_ENV = 'dev'
 process.env.CONFIG_NETWORK = 'local'
 const config = require('../config')
 
-// make sure hardhat will use local network
-process.env.HARDHAT_NETWORK = 'hardhat'
 const hre = require('hardhat')
 const { ethers } = hre
 const eip1820 = require('../logic/eip1820')
 const { expect } = require('chai')
 
+let p = { p: Promise.resolve() };
+// put this line with a breakpoint as async breakpoint
+// usage: assign a promise to p.p and step over
+// while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
 describe('eip1820', function() {
   let wdpr
   let deployer
@@ -30,6 +32,7 @@ describe('eip1820', function() {
   })
   it('Should work with ERC777', async function() {
     const WDPR = await ethers.getContractFactory('WDPR')
+    while (p.t !== p.p) p.r = await (p.t = p.p).catch(e => e)
     wdpr = await WDPR.deploy()
     await wdpr.deployed()
     
@@ -43,7 +46,7 @@ describe('eip1820', function() {
       .emit(wdpr, 'Deposit')
       .withArgs(deployer.address, ethers.utils.parseEther('1'))
     
-    await expect(wdpr.approve(goldToWDPRERC777TokensRecipient.address, ethers.utils.parseUnits('1', 'ether')))
+    await expect(wdpr.approve(goldToWDPRERC777TokensRecipient.address, ethers.utils.parseUnits('1', 'ether'),{gasLimit:5000000}))
       .to
       .emit(wdpr, 'Approval')
       .withArgs(deployer.address, goldToWDPRERC777TokensRecipient.address, ethers.utils.parseUnits('1', 'ether'))

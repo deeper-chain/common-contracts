@@ -23,7 +23,7 @@ contract GOLDToWDPRERC777TokensRecipient is IERC777Recipient, IERC1820Implemente
 
     event DoneStuff(address operator, address from, address to, uint256 amount, bytes userData, bytes operatorData);
 
-    constructor (address token, address wdpr) public {
+    constructor (address token, address wdpr) {
         _token = IERC777(token);
         _wdpr = IERC20(wdpr);
     }

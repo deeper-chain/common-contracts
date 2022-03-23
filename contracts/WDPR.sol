@@ -26,11 +26,18 @@ contract WDPR {
 
     function withdraw(uint256 wad) public {
         require(balanceOf[msg.sender] >= wad, "WDPR: withdraw amount exceeds balance");
+
+
+
+
         balanceOf[msg.sender] -= wad;
 
         emit Withdrawal(msg.sender, wad);
+
         (bool success,) = msg.sender.call{value : wad}("");
         require(success, "WDPR: DPR transfer failed");
+
+
     }
 
     function totalSupply() public view returns (uint256) {
