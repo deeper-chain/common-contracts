@@ -21,13 +21,6 @@ async function main () {
   
   console.log('WDPR deployed to:', WDPR.address)
   
-  if(config.configPreset.env==='prod'){
-    console.log('verify on blockchain explorer')
-    await hre.run("verify:verify", {
-      address: WDPR.address
-    })
-  }
-  
   logRemindWriteDownConfig({WDPR:WDPR.address})
 }
 

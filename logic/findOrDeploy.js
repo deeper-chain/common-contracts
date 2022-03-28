@@ -1,5 +1,6 @@
 const config = require('../config')
-const { ethers } = require('hardhat')
+const hre = require('hardhat')
+const { ethers } = hre
 module.exports = async function(name, ...deployArgs) {
   const ContractFactory = await ethers.getContractFactory(name)
   let contract
@@ -11,7 +12,13 @@ module.exports = async function(name, ...deployArgs) {
     contract = await ContractFactory.deploy(...deployArgs)
     
     console.log(`Deployed ${name} at:`, contract.address)
-    
+  
+    if (config.configPreset.deploy !== 'local') {
+      await hre.run('verify:verify', {
+        address: contract.address,
+        constructorArguments: deployArgs
+      })
+    }
   }
   return contract
 }

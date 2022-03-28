@@ -1,0 +1,82 @@
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/AddressStringUtil.sol b/node_modules/@uniswap/lib/contracts/libraries/AddressStringUtil.sol
+index dd71ac3..204222a 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/AddressStringUtil.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/AddressStringUtil.sol
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ 
+-pragma solidity >=0.5.0;
++pragma solidity >=0.5.0 <0.7.0;
+ 
+ library AddressStringUtil {
+     // converts an address to the uppercase hex string, extracting only len bytes (up to 20, multiple of 2)
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/Babylonian.sol b/node_modules/@uniswap/lib/contracts/libraries/Babylonian.sol
+index 3ca7b96..e810fb8 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/Babylonian.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/Babylonian.sol
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ 
+-pragma solidity >=0.4.0;
++pragma solidity >=0.5.0 <0.7.0;
+ 
+ // computes square roots using the babylonian method
+ // https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/BitMath.sol b/node_modules/@uniswap/lib/contracts/libraries/BitMath.sol
+index d570c2d..3e06a07 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/BitMath.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/BitMath.sol
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+-pragma solidity >=0.5.0;
++pragma solidity >=0.5.0 <0.7.0;
++
+ 
+ library BitMath {
+     // returns the 0 indexed position of the most significant bit of the input x
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/FixedPoint.sol b/node_modules/@uniswap/lib/contracts/libraries/FixedPoint.sol
+index 27d0ed6..f330d4c 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/FixedPoint.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/FixedPoint.sol
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+-pragma solidity >=0.4.0;
++pragma solidity >=0.5.0 <0.7.0;
+ 
+ import './FullMath.sol';
+ import './Babylonian.sol';
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/FullMath.sol b/node_modules/@uniswap/lib/contracts/libraries/FullMath.sol
+index f06356c..33bdd17 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/FullMath.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/FullMath.sol
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: CC-BY-4.0
+-pragma solidity >=0.4.0;
++pragma solidity >=0.5.0 <0.7.0;
+ 
+ // taken from https://medium.com/coinmonks/math-in-solidity-part-3-percents-and-proportions-4db014e080b1
+ // license is CC-BY-4.0
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/SafeERC20Namer.sol b/node_modules/@uniswap/lib/contracts/libraries/SafeERC20Namer.sol
+index 90fed39..2e2ef06 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/SafeERC20Namer.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/SafeERC20Namer.sol
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ 
+-pragma solidity >=0.5.0;
++pragma solidity >=0.5.0 <0.7.0;
+ 
+ import './AddressStringUtil.sol';
+ 
+diff --git a/node_modules/@uniswap/lib/contracts/libraries/TransferHelper.sol b/node_modules/@uniswap/lib/contracts/libraries/TransferHelper.sol
+index 284d09f..daaf126 100644
+--- a/node_modules/@uniswap/lib/contracts/libraries/TransferHelper.sol
++++ b/node_modules/@uniswap/lib/contracts/libraries/TransferHelper.sol
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ 
+-pragma solidity >=0.6.0;
++pragma solidity >=0.6.0 <0.7.0;
+ 
+ // helper methods for interacting with ERC20 tokens and sending ETH that do not consistently return true/false
+ library TransferHelper {
