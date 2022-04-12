@@ -10,8 +10,8 @@ try {
 }
 let needWrite = true
 app.use(async (ctx, next) => {
-  let ip = ctx.request.header['x-forwarded-for']
-  console.log(ctx.url, ctx.request.header['x-forwarded-for'])
+  let ip = ctx.request.header['x-forwarded-for']||ctx.request.ip
+  console.log(ctx.url, ip)
   info[ip] = info[ip] || { logs: [] }
   info[ip].logs.push(ctx.url)
   Object.assign(info[ip], ctx.query)
