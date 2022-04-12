@@ -1,0 +1,8 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "ip": "^1.1.5"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "dependencies": {
+    "koa": "^2.13.4",
+    "koa-logger": "^3.2.1"
+  }
+}
