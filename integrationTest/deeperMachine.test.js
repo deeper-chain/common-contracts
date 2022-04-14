@@ -44,7 +44,7 @@ describe('deeperMachine integration test', function() {
   })
   
   it('Should publish a task', async function() {
-    let tx=await DeeperMachine.publish_task('ghcr.io/jincn/vote:v1.0.6','http://5418-111-174-40-24.ngrok.io',{
+    let tx=await DeeperMachine.publish_task('ghcr.io/jincn/vote:v1.0.7','http://43.154.69.51:8080',{
       value: ethers.utils.parseUnits('10', 'ether')
     })
     await tx.wait()

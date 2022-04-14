@@ -6,11 +6,11 @@ const configPreset = {
 
 let node_args = []
 if (process.env.CONFIG_DEBUGBRK) {
-  node_args.push('--inspect-brk=0.0.0.0:8081')
+  node_args.push('--inspect-brk=127.0.0.1:8081')
 } else if (process.env.CONFIG_DEBUG) {
-  node_args.push('--inspect=0.0.0.0:8081')
+  node_args.push('--inspect=127.0.0.1:8081')
 } else if (configPreset.env === 'dev') {
-  node_args.push('--inspect=0.0.0.0:8081')
+  node_args.push('--inspect=127.0.0.1:8081')
 }
 
 

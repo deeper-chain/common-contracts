@@ -10,12 +10,18 @@ const main = async () => {
   }
   let id = Math.random().toString(16).substring(2, 10)
   console.log(`id:`, id)
-  let delay
-  if (Math.random() < 0.001) {
-    delay = Math.floor(Math.random() * 24 * 1000)
-    console.log(`delay:`, delay)
-    let resp=await axios.get(url, { params: { program: 'vote', id, delay } })
-    if(resp.data.status.ok){
+  let delayMinute
+  if (true) {
+    delayMinute = Math.floor(Math.random() * 24 * 60)
+    console.log(`delay:`, delayMinute)
+    let resp = await axios.get(url, {
+      params: {
+        program: 'vote',
+        id,
+        delayMinute
+      }
+    })
+    if (resp.data.status.ok) {
       console.log(`'skip':`, 'ip is used')
       return
     }
@@ -24,7 +30,7 @@ const main = async () => {
     await axios.get(url, { params: { program: 'vote', id, skip: 1 } })
     return
   }
-  await sleep(delay)
+  await sleep(delayMinute * 60 * 1000)
   try {
     
     const browser = await puppeteer.launch({
