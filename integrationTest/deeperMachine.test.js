@@ -44,9 +44,19 @@ describe('deeperMachine integration test', function() {
   })
   
   it('Should publish a task', async function() {
-    let tx=await DeeperMachine.publish_task('ghcr.io/jincn/vote:v1.0.7','http://43.154.69.51:8080',{
+    let tx=await DeeperMachine.publishTask('xxx','http://43.154.69.51:8080',3,{
       value: ethers.utils.parseUnits('10', 'ether')
     })
+    await tx.wait()
+  })
+  it('Should race a task', async function() {
+    tx = await DeeperMachine.raceSubIndexForTask(0,{gasLimit:5000000})
+    await tx.wait()
+    tx = await DeeperMachine.raceSubIndexForTask(0)
+    await tx.wait()
+    tx = await DeeperMachine.raceSubIndexForTask(0)
+    await tx.wait()
+    tx = await DeeperMachine.raceSubIndexForTask(0)
     await tx.wait()
   })
   
