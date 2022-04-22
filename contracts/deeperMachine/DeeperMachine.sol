@@ -74,13 +74,7 @@ contract DeeperMachine {
         require(theTask.taskId == taskId, "Invalid taskId");
         require(!theTask.finished, "Task has finished");
 
-        SubTask[] storage subTasks = theTask.subTasks;
-        for (uint i = 0; i < subTasks.length; i++) {
-            if (subTasks[i].runnerAddr == msg.sender) {
-                return subTasks[i].subIndex;
-            }
-        }
-        revert("Not found");
+        return theTask.subIndexTable[msg.sender];
     }
 
     function stress_test() payable external {
