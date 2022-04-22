@@ -16,6 +16,7 @@ contract DeeperMachine {
         bool filled;
         bool finished;
         SubTask[] subTasks;
+        mapping(address => uint) subIndexTable;
     }
 
     event TaskPublished(uint taskId, string url, string options, uint maxRunNum);
@@ -34,14 +35,14 @@ contract DeeperMachine {
     function publishTask(string calldata url, string calldata options, uint maxRunNum) payable external {
         require(msg.value >= taskPrice, "DPR price not correct");
 
-        uint taskId = allTasks.length;
+        uint taskId = allTasks.length + 1;
 
         allTasks.push();
 
-        allTasks[taskId].taskId = taskId;
-        allTasks[taskId].maxRunNum = maxRunNum;
+        allTasks[taskId - 1].taskId = taskId;
+        allTasks[taskId - 1].maxRunNum = maxRunNum;
         emit TaskPublished(taskId, url, options, maxRunNum);
-        console.log('pushed task:', allTasks.length);
+        console.log('pushed task:', taskId);
     }
 
     function raceSubIndexForTask(uint taskId) external {
@@ -49,22 +50,30 @@ contract DeeperMachine {
         require(theTask.taskId == taskId, "Invalid taskId");
         require(!theTask.finished, "Task has been finished");
         require(!theTask.filled, "Task has been filled");
+        require(theTask.subIndexTable[msg.sender] > 0, "Address already used");
 
-        uint subIndex = theTask.subTasks.length;
+        uint subIndex = theTask.subTasks.length + 1;
 
-        theTask.subTasks.push(SubTask({subIndex : subIndex, runnerAddr : msg.sender}));
+        theTask.subTasks.push();
 
-        if(theTask.maxRunNum!=0&&subIndex+1==theTask.maxRunNum){
+        theTask.subTasks[subIndex - 1].subIndex = subIndex;
+        theTask.subTasks[subIndex - 1].runnerAddr = msg.sender;
+
+        theTask.subIndexTable[msg.sender] = subIndex;
+
+        if (theTask.maxRunNum != 0 && subIndex >= theTask.maxRunNum) {
             theTask.filled = true;
             emit TaskFilled(taskId);
         }
-        console.log("pushed subtask:", theTask.subTasks.length);
+
+        console.log("pushed subtask:", subIndex);
     }
 
     function readSubIndexForTask(uint taskId) view external returns (uint){
         Task storage theTask = allTasks[taskId];
         require(theTask.taskId == taskId, "Invalid taskId");
         require(!theTask.finished, "Task has finished");
+
         SubTask[] storage subTasks = theTask.subTasks;
         for (uint i = 0; i < subTasks.length; i++) {
             if (subTasks[i].runnerAddr == msg.sender) {

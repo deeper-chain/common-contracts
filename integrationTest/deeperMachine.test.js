@@ -44,13 +44,13 @@ describe('deeperMachine integration test', function() {
   })
   
   it('Should publish a task', async function() {
-    let tx=await DeeperMachine.publishTask('xxx','http://43.154.69.51:8080',3,{
+    let tx=await DeeperMachine.publishTask('xxx','http://43.154.69.51:8080',100,{
       value: ethers.utils.parseUnits('10', 'ether')
     })
     await tx.wait()
   })
   it('Should race a task', async function() {
-    tx = await DeeperMachine.raceSubIndexForTask(0,{gasLimit:5000000})
+    let tx = await DeeperMachine.raceSubIndexForTask(3)
     await tx.wait()
     tx = await DeeperMachine.raceSubIndexForTask(0)
     await tx.wait()
@@ -58,6 +58,11 @@ describe('deeperMachine integration test', function() {
     await tx.wait()
     tx = await DeeperMachine.raceSubIndexForTask(0)
     await tx.wait()
+  })
+  
+  it('Should read a task', async function() {
+    let ret=await DeeperMachine.allTasks(3)
+    console.log(`ret:`, ret)
   })
   
 })
