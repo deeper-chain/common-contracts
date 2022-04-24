@@ -34,7 +34,7 @@ contract DeeperMachine {
     }
 
     function raceSubIndexForTask(uint64 taskId) external {
-        require(taskSum > taskId, "Invalid taskId");
+        require(taskSum >= taskId, "Invalid taskId");
         require(taskInfo[taskId].maxRunNum > taskInfo[taskId].currentRunNum + 1, "Task has been filled");
         require(!readSubIndexForTask(taskId), "Address already used");
 
