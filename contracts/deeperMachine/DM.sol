@@ -21,9 +21,12 @@ contract DeeperMachine {
         owner = msg.sender;
     }
 
-    function publishTask(string calldata url, string calldata options, uint64 maxRunNum) payable external {
+    modifier checkBalance {
         require(msg.value >= taskPrice, "DPR token not enough");
+        _;
+    }
 
+    function publishTask(string calldata url, string calldata options, uint64 maxRunNum) external payable checkBalance {
         taskSum = taskSum + 1;
         taskInfo[taskSum].maxRunNum = maxRunNum;
         taskInfo[taskSum].currentRunNum = 0;
@@ -32,7 +35,7 @@ contract DeeperMachine {
     }
 
     function raceSubIndexForTask(uint64 taskId) external {
-        require(taskId <= taskSum, "Invalid taskId");
+        require(taskSum > taskId, "Invalid taskId");
         require(taskInfo[taskId].maxRunNum > taskInfo[taskId].currentRunNum + 1, "Task has been filled");
         require(!readSubIndexForTask(taskId), "Address already used");
 
@@ -42,7 +45,7 @@ contract DeeperMachine {
         emit RaceTask(msg.sender);
     }
 
-    function readSubIndexForTask(uint64 taskId) view public returns (bool){
+    function readSubIndexForTask(uint64 taskId) public view returns (bool) {
         for(uint64 i = 0;i < userTask[msg.sender].length; i++ ) {
             if(userTask[msg.sender][i] == taskId) {
                 return true;
@@ -51,12 +54,11 @@ contract DeeperMachine {
         return false;
     }
 
-    function stress_test() payable external {
-        require(msg.value >= taskPrice, "DPR token not enough");
+    function stressTest() external payable checkBalance {
         emit stress_test_task();
     }
 
-    function withdraw_fund() external {
+    function withdrawFund() external {
         require(msg.sender == owner, "nw");
         address payable powner = payable(owner);
         powner.transfer(address(this).balance);
