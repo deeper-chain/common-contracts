@@ -46,11 +46,11 @@ contract DeeperMachine {
     }
 
     function raceSubIndexForTask(uint taskId) external {
-        Task storage theTask = allTasks[taskId];
+        Task storage theTask = allTasks[taskId - 1];
         require(theTask.taskId == taskId, "Invalid taskId");
         require(!theTask.finished, "Task has been finished");
         require(!theTask.filled, "Task has been filled");
-        require(theTask.subIndexTable[msg.sender] > 0, "Address already used");
+        require(theTask.subIndexTable[msg.sender] == 0, "Address already used");
 
         uint subIndex = theTask.subTasks.length + 1;
 

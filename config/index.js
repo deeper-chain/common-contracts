@@ -118,7 +118,7 @@ configManager.set({
       UniswapV2Factory: '0x7122aF5960556FB2F2551d5817851fC94189C065',
       UniswapV2Router02: '0x47f74A0dAdB2ab676C5768CD5EdEf72d9286A552',
       UniswapV2PairByteCodeHash:'0xbb0f2e0c0bf90856d193723773f6568f591f0dd81a4d686d2513845240a1b28d',
-      DeeperMachine:'0xb6152ee4Cc7ce632aD84490e22bEfb2a36DE0AB6'
+      DeeperMachine:'0xB0B401Aa1033c32fC6e2033ddDfaC929318a2d97'
     },
     'main.dev.deeper': {
       WDPR: '0x234baf301C2975F5D2F20DD7875F3543b64b0B9c',
