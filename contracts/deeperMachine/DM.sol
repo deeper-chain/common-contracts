@@ -6,14 +6,13 @@ contract DeeperMachine {
         uint64 currentRunNum;
         uint64 maxRunNum;
     }
-    mapping(address => uint64[]) userTask;
-    mapping(uint64 => Task) taskInfo;
+    mapping(address => uint64[]) public userTask;
+    mapping(uint64 => Task) public taskInfo;
 
-    event stress_test_task();
+    event StressTestTask();
     event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum);
     event RaceTask(address node);
     
-    uint256 public taskPrice = 10 * 10 ** 18;
     uint64 public taskSum = 0;
     address public owner;
 
@@ -22,7 +21,7 @@ contract DeeperMachine {
     }
 
     modifier checkBalance {
-        require(msg.value >= taskPrice, "DPR token not enough");
+        require(msg.value >= 10 * 10 ** 18, "Paying for DPR is not enough");
         _;
     }
 
@@ -55,7 +54,7 @@ contract DeeperMachine {
     }
 
     function stressTest() external payable checkBalance {
-        emit stress_test_task();
+        emit StressTestTask();
     }
 
     function withdrawFund() external {
