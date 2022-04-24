@@ -34,11 +34,7 @@ contract DeeperMachine {
     function raceSubIndexForTask(uint64 taskId) external {
         require(taskId <= taskSum, "Invalid taskId");
         require(taskInfo[taskId].maxRunNum > taskInfo[taskId].currentRunNum + 1, "Task has been filled");
-        for(uint64 i = 0;i < userTask[msg.sender].length; i++ ) {
-            if(userTask[msg.sender][i] == taskId) {
-                revert("Address already used");
-            }
-        }
+        require(!readSubIndexForTask(taskId), "Address already used");
 
         userTask[msg.sender].push(taskId);
         taskInfo[taskId].currentRunNum = taskInfo[taskId].currentRunNum + 1;
@@ -46,7 +42,7 @@ contract DeeperMachine {
         emit RaceTask(msg.sender);
     }
 
-    function readSubIndexForTask(uint64 taskId) view external returns (bool){
+    function readSubIndexForTask(uint64 taskId) view public returns (bool){
         for(uint64 i = 0;i < userTask[msg.sender].length; i++ ) {
             if(userTask[msg.sender][i] == taskId) {
                 return true;
