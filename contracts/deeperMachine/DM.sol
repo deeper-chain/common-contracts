@@ -6,7 +6,7 @@ contract DeeperMachine {
         uint64 currentRunNum;
         uint64 maxRunNum;
     }
-    mapping(address => uint64[]) public userTask;
+    mapping(address => mapping (uint64 => bool)) public userTask;
     mapping(uint64 => Task) public taskInfo;
 
     event StressTestTask();
@@ -38,19 +38,14 @@ contract DeeperMachine {
         require(taskInfo[taskId].maxRunNum >= taskInfo[taskId].currentRunNum + 1, "Task has been filled");
         require(!readSubIndexForTask(taskId), "Address already used");
 
-        userTask[msg.sender].push(taskId);
+        userTask[msg.sender][taskId] = true;
         taskInfo[taskId].currentRunNum = taskInfo[taskId].currentRunNum + 1;
 
         emit RaceTask(msg.sender);
     }
 
     function readSubIndexForTask(uint64 taskId) public view returns (bool) {
-        for(uint64 i = 0;i < userTask[msg.sender].length; i++ ) {
-            if(userTask[msg.sender][i] == taskId) {
-                return true;
-            }
-        }
-        return false;
+        return userTask[msg.sender][taskId];
     }
 
     function stressTest() external payable checkBalance {
