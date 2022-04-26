@@ -11,7 +11,7 @@ contract DeeperMachine {
 
     event StressTestTask();
     event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum);
-    event RaceTask(address node);
+    event RaceTask(address node, uint64 taskId);
     
     uint64 public taskSum = 0;
     address public owner;
@@ -41,7 +41,7 @@ contract DeeperMachine {
         userTask[msg.sender][taskId] = true;
         taskInfo[taskId].currentRunNum = taskInfo[taskId].currentRunNum + 1;
 
-        emit RaceTask(msg.sender);
+        emit RaceTask(msg.sender, taskId);
     }
 
     function readSubIndexForTask(uint64 taskId) public view returns (bool) {
