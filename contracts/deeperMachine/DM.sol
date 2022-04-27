@@ -20,6 +20,11 @@ contract DeeperMachine {
         owner = msg.sender;
     }
 
+    modifier onlyOwner {
+        require(msg.sender == owner, "not owner address");
+        _;
+    }
+
     modifier checkBalance {
         require(msg.value >= 10 * 10 ** 18, "Paying for DPR is not enough");
         _;
@@ -52,10 +57,8 @@ contract DeeperMachine {
         emit StressTestTask();
     }
 
-    function withdrawFund() external {
-        require(msg.sender == owner, "nw");
+    function withdrawFund() external onlyOwner {
         address payable powner = payable(owner);
         powner.transfer(address(this).balance);
     }
-
 }
