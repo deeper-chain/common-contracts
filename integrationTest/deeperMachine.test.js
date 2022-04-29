@@ -49,11 +49,11 @@ describe('deeperMachine integration test', function() {
       gasLimit:5000000
     })
     await tx.wait()
-    tx = await DeeperMachine.raceSubIndexForTask(1)
+    tx = await DeeperMachine.raceSubIndexForTask(14, { gasLimit: 5000000 })
     await tx.wait()
   })
   it('Should race a task', async function() {
-    let tx = await DeeperMachine.raceSubIndexForTask(1,{gasLimit:5000000})
+    let tx = await DeeperMachine.raceSubIndexForTask(12,{gasLimit:5000000})
     await tx.wait()
   })
   

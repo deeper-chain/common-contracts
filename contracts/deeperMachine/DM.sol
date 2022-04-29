@@ -5,16 +5,27 @@ contract DeeperMachine {
     struct Task {
         uint64 currentRunNum;
         uint64 maxRunNum;
+        uint64 startTime;
     }
-    mapping(address => mapping (uint64 => bool)) public userTask;
+
+    mapping(address => mapping(uint64 => bool)) public userTask;
+    mapping(address => mapping(uint64 => bool)) public userTaskCompleted;
+
     mapping(uint64 => Task) public taskInfo;
+
+    mapping(address => mapping(uint64 => uint64)) public userDayIncome;
+    mapping(address => uint64) public userSettledDay;
 
     event StressTestTask();
     event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum);
     event RaceTask(address node, uint64 taskId);
-    
+
     uint64 public taskSum = 0;
     address public owner;
+
+    uint64 public price = 10 ether;
+    uint64 public raceTimeout = 20 minutes;
+    uint64 public completeTimeout = 48 hours;
 
     constructor() {
         owner = msg.sender;
@@ -26,14 +37,31 @@ contract DeeperMachine {
     }
 
     modifier checkBalance {
-        require(msg.value >= 10 * 10 ** 18, "Paying for DPR is not enough");
+        require(msg.value >= price, "Paying for DPR is not enough");
         _;
+    }
+
+    function implementationVersion() external pure virtual returns (string memory) {
+        return "1.0.0";
+    }
+
+    function setPrice(uint64 _price) external onlyOwner {
+        price = _price;
+    }
+
+    function setRaceTimeout(uint64 _raceTimeout) external onlyOwner {
+        raceTimeout = _raceTimeout;
+    }
+
+    function setCompleteTimeout(uint64 _completeTimeout) external onlyOwner {
+        completeTimeout = _completeTimeout;
     }
 
     function publishTask(string calldata url, string calldata options, uint64 maxRunNum) external payable checkBalance {
         taskSum = taskSum + 1;
         taskInfo[taskSum].maxRunNum = maxRunNum;
         taskInfo[taskSum].currentRunNum = 0;
+        taskInfo[taskSum].startTime = block.timestamp;
 
         emit TaskPublished(taskSum, url, options, maxRunNum);
     }
@@ -41,12 +69,37 @@ contract DeeperMachine {
     function raceSubIndexForTask(uint64 taskId) external {
         require(taskSum >= taskId, "Invalid taskId");
         require(taskInfo[taskId].maxRunNum >= taskInfo[taskId].currentRunNum + 1, "Task has been filled");
+        require(taskInfo[taskId].startTime + raceTimeout >= block.timestamp, "Task race has been expired");
+
         require(!readSubIndexForTask(taskId), "Address already used");
 
         userTask[msg.sender][taskId] = true;
         taskInfo[taskId].currentRunNum = taskInfo[taskId].currentRunNum + 1;
 
         emit RaceTask(msg.sender, taskId);
+    }
+
+    function completeSubIndexForTask(uint64 taskId) external {
+        require(userTask[msg.sender][taskId], "Invalid taskId or task not raced");
+        require(!userTaskCompleted[msg.sender][taskId], "Sub task has been completed");
+        require(taskInfo[taskId].startTime + completeTimeout >= block.timestamp, "Task has been expired");
+
+        userTaskCompleted[msg.sender][taskId] = true;
+
+        uint64 day = block.timestamp / 1 days;
+        userDayIncome[msg.sender][day] += price / taskInfo[taskId].maxRunNum;
+    }
+
+    function withdrawEarnings() external {
+        uint64 day = block.timestamp / 1 days;
+        uint64 amount = 0;
+        for(uint64 p=userSettledDay[msg.sender]+1;p<=day-1;p++){
+            amount += userDayIncome[msg.sender][p];
+        }
+        userSettledDay[msg.sender] = day - 1;
+
+        (bool success,) = msg.sender.call{value : amount}("");
+        require(success, "DPR transfer failed");
     }
 
     function readSubIndexForTask(uint64 taskId) public view returns (bool) {

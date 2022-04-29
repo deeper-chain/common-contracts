@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 contract DeeperMachine {
 
     struct SubTask {
@@ -42,7 +40,7 @@ contract DeeperMachine {
         allTasks[taskId - 1].taskId = taskId;
         allTasks[taskId - 1].maxRunNum = maxRunNum;
         emit TaskPublished(taskId, url, options, maxRunNum);
-        console.log('pushed task:', taskId);
+//        console.log('pushed task:', taskId);
     }
 
     function raceSubIndexForTask(uint taskId) external {
@@ -66,11 +64,11 @@ contract DeeperMachine {
             emit TaskFilled(taskId);
         }
 
-        console.log("pushed subtask:", subIndex);
+//        console.log("pushed subtask:", subIndex);
     }
 
     function readSubIndexForTask(uint taskId) view external returns (uint){
-        Task storage theTask = allTasks[taskId];
+        Task storage theTask = allTasks[taskId - 1];
         require(theTask.taskId == taskId, "Invalid taskId");
         require(!theTask.finished, "Task has finished");
 
