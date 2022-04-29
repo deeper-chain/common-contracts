@@ -2,86 +2,115 @@
 pragma solidity ^0.8.0;
 
 contract DeeperMachine {
-
-    struct SubTask {
-        uint subIndex;
-        address runnerAddr;
-    }
-
     struct Task {
-        uint taskId;
-        uint maxRunNum;
-        bool filled;
-        bool finished;
-        SubTask[] subTasks;
-        mapping(address => uint) subIndexTable;
+        uint64 currentRunNum;
+        uint64 maxRunNum;
+        uint64 startTime;
     }
 
-    event TaskPublished(uint taskId, string url, string options, uint maxRunNum);
-    event TaskFilled(uint taskId);
-    event TaskFinished(uint taskId);
-    event stress_test_task();
+    mapping(address => mapping(uint64 => bool)) public userTask;
+    mapping(address => mapping(uint64 => bool)) public userTaskCompleted;
 
-    uint256 public taskPrice = 10 * 10 ** 18;
-    Task[] public allTasks;
+    mapping(uint64 => Task) public taskInfo;
+
+    mapping(address => mapping(uint64 => uint64)) public userDayIncome;
+    mapping(address => uint64) public userSettledDay;
+
+    event StressTestTask();
+    event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum);
+    event RaceTask(address node, uint64 taskId);
+
+    uint64 public taskSum = 0;
     address public owner;
+
+    uint64 public price = 10 ether;
+    uint64 public raceTimeout = 20 minutes;
+    uint64 public completeTimeout = 48 hours;
 
     constructor() {
         owner = msg.sender;
     }
 
-    function publishTask(string calldata url, string calldata options, uint maxRunNum) payable external {
-        require(msg.value >= taskPrice, "DPR price not correct");
-
-        uint taskId = allTasks.length + 1;
-
-        allTasks.push();
-
-        allTasks[taskId - 1].taskId = taskId;
-        allTasks[taskId - 1].maxRunNum = maxRunNum;
-        emit TaskPublished(taskId, url, options, maxRunNum);
-//        console.log('pushed task:', taskId);
+    modifier onlyOwner {
+        require(msg.sender == owner, "not owner address");
+        _;
     }
 
-    function raceSubIndexForTask(uint taskId) external {
-        Task storage theTask = allTasks[taskId - 1];
-        require(theTask.taskId == taskId, "Invalid taskId");
-        require(!theTask.finished, "Task has been finished");
-        require(!theTask.filled, "Task has been filled");
-        require(theTask.subIndexTable[msg.sender] == 0, "Address already used");
+    modifier checkBalance {
+        require(msg.value >= price, "Paying for DPR is not enough");
+        _;
+    }
 
-        uint subIndex = theTask.subTasks.length + 1;
+    function implementationVersion() external pure virtual returns (string memory) {
+        return "1.0.0";
+    }
 
-        theTask.subTasks.push();
+    function setPrice(uint64 _price) external onlyOwner {
+        price = _price;
+    }
 
-        theTask.subTasks[subIndex - 1].subIndex = subIndex;
-        theTask.subTasks[subIndex - 1].runnerAddr = msg.sender;
+    function setRaceTimeout(uint64 _raceTimeout) external onlyOwner {
+        raceTimeout = _raceTimeout;
+    }
 
-        theTask.subIndexTable[msg.sender] = subIndex;
+    function setCompleteTimeout(uint64 _completeTimeout) external onlyOwner {
+        completeTimeout = _completeTimeout;
+    }
 
-        if (theTask.maxRunNum != 0 && subIndex >= theTask.maxRunNum) {
-            theTask.filled = true;
-            emit TaskFilled(taskId);
+    function publishTask(string calldata url, string calldata options, uint64 maxRunNum) external payable checkBalance {
+        taskSum = taskSum + 1;
+        taskInfo[taskSum].maxRunNum = maxRunNum;
+        taskInfo[taskSum].currentRunNum = 0;
+        taskInfo[taskSum].startTime = uint64(block.timestamp);
+
+        emit TaskPublished(taskSum, url, options, maxRunNum);
+    }
+
+    function raceSubIndexForTask(uint64 taskId) external {
+        require(taskSum >= taskId, "Invalid taskId");
+        require(taskInfo[taskId].maxRunNum >= taskInfo[taskId].currentRunNum + 1, "Task has been filled");
+        require(taskInfo[taskId].startTime + raceTimeout >= block.timestamp, "Task race has been expired");
+
+        require(!readSubIndexForTask(taskId), "Address already used");
+
+        userTask[msg.sender][taskId] = true;
+        taskInfo[taskId].currentRunNum = taskInfo[taskId].currentRunNum + 1;
+
+        emit RaceTask(msg.sender, taskId);
+    }
+
+    function completeSubIndexForTask(uint64 taskId) external {
+        require(userTask[msg.sender][taskId], "Invalid taskId or task not raced");
+        require(!userTaskCompleted[msg.sender][taskId], "Sub task has been completed");
+        require(taskInfo[taskId].startTime + completeTimeout >= block.timestamp, "Task has been expired");
+
+        userTaskCompleted[msg.sender][taskId] = true;
+
+        uint64 day = uint64(block.timestamp / 1 days);
+        userDayIncome[msg.sender][day] += price / taskInfo[taskId].maxRunNum;
+    }
+
+    function withdrawEarnings() external {
+        uint64 day = uint64(block.timestamp / 1 days);
+        uint64 amount = 0;
+        for (uint64 p = userSettledDay[msg.sender] + 1; p <= day - 1; p++) {
+            amount += userDayIncome[msg.sender][p];
         }
+        userSettledDay[msg.sender] = day - 1;
 
-//        console.log("pushed subtask:", subIndex);
+        (bool success,) = msg.sender.call{value : amount}("");
+        require(success, "DPR transfer failed");
     }
 
-    function readSubIndexForTask(uint taskId) view external returns (uint){
-        Task storage theTask = allTasks[taskId - 1];
-        require(theTask.taskId == taskId, "Invalid taskId");
-        require(!theTask.finished, "Task has finished");
-
-        return theTask.subIndexTable[msg.sender];
+    function readSubIndexForTask(uint64 taskId) public view returns (bool) {
+        return userTask[msg.sender][taskId];
     }
 
-    function stress_test() payable external {
-        require(msg.value >= taskPrice, "DPR price not correct");
-        emit stress_test_task();
+    function stressTest() external payable checkBalance {
+        emit StressTestTask();
     }
 
-    function withdraw_fund() external {
-        require(msg.sender == owner, "nw");
+    function withdrawFund() external onlyOwner {
         address payable powner = payable(owner);
         powner.transfer(address(this).balance);
     }

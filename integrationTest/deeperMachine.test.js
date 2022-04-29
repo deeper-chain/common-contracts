@@ -21,6 +21,7 @@ describe('deeperMachine integration test', function() {
   let acceptDPRAsWDPR
   let transferFromCaller
   let deployer
+  let A
   let failed = false
   // Skip test if any prior test in this describe failed
   beforeEach(function() {
@@ -34,7 +35,7 @@ describe('deeperMachine integration test', function() {
     this.timeout(30000)
     await hre.run('compile')
     
-    ;([deployer] = await ethers.getSigners())
+    ;([deployer,A] = await ethers.getSigners())
     console.log(`network:`, await deployer.provider.getNetwork())
     
     console.log(`deployer.address:`, deployer.address)
@@ -44,16 +45,23 @@ describe('deeperMachine integration test', function() {
   })
   
   it('Should publish a task', async function() {
+    DeeperMachine=DeeperMachine.connect(A)
     let tx=await DeeperMachine.publishTask('xxx','http://43.154.69.51:8080',100,{
-      value: ethers.utils.parseUnits('10', 'ether'),
-      gasLimit:5000000
+      value: ethers.utils.parseUnits('10', 'ether')
     })
     await tx.wait()
-    tx = await DeeperMachine.raceSubIndexForTask(14, { gasLimit: 5000000 })
+    tx = await DeeperMachine.raceSubIndexForTask(0, { gasLimit: 5000000&&
+        undefined })
     await tx.wait()
   })
   it('Should race a task', async function() {
     let tx = await DeeperMachine.raceSubIndexForTask(12,{gasLimit:5000000})
+    await tx.wait()
+  })
+  it('Should set a task', async function() {
+    let tx = await DeeperMachine.publishTask('xxx', 'http://43.154.69.51:8080', 100, {
+      value: ethers.utils.parseUnits('10', 'ether')
+    })
     await tx.wait()
   })
   
