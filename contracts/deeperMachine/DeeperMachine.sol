@@ -26,9 +26,11 @@ contract DeeperMachine {
     uint64 public price = 10 ether;
     uint64 public raceTimeout = 20 minutes;
     uint64 public completeTimeout = 48 hours;
+    uint64 public startDay;
 
     constructor() {
         owner = msg.sender;
+        startDay = uint64(block.timestamp / 1 days);
     }
 
     modifier onlyOwner {
@@ -42,7 +44,7 @@ contract DeeperMachine {
     }
 
     function implementationVersion() external pure virtual returns (string memory) {
-        return "1.0.0";
+        return "1.0.1";
     }
 
     function setPrice(uint64 _price) external onlyOwner {
@@ -90,12 +92,22 @@ contract DeeperMachine {
         userDayIncome[msg.sender][day] += price / taskInfo[taskId].maxRunNum;
     }
 
-    function withdrawEarnings() external {
+    function calcEarnings() public view returns (uint64){
         uint64 day = uint64(block.timestamp / 1 days);
         uint64 amount = 0;
-        for (uint64 p = userSettledDay[msg.sender] + 1; p <= day - 1; p++) {
+        uint64 settledDay = userSettledDay[msg.sender];
+        if (settledDay == 0) {
+            settledDay = startDay;
+        }
+        for (uint64 p = settledDay + 1; p <= day - 1; p++) {
             amount += userDayIncome[msg.sender][p];
         }
+        return amount;
+    }
+
+    function withdrawEarnings() external {
+        uint64 amount = calcEarnings();
+        uint64 day = uint64(block.timestamp / 1 days);
         userSettledDay[msg.sender] = day - 1;
 
         (bool success,) = msg.sender.call{value : amount}("");

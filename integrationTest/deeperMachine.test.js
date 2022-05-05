@@ -45,13 +45,12 @@ describe('deeperMachine integration test', function() {
   })
   
   it('Should publish a task', async function() {
-    DeeperMachine=DeeperMachine.connect(A)
+
     let tx=await DeeperMachine.publishTask('xxx','http://43.154.69.51:8080',100,{
       value: ethers.utils.parseUnits('10', 'ether')
     })
     await tx.wait()
-    tx = await DeeperMachine.raceSubIndexForTask(0, { gasLimit: 5000000&&
-        undefined })
+    tx = await DeeperMachine.raceSubIndexForTask(0, { gasLimit: 5000000 })
     await tx.wait()
   })
   it('Should race a task', async function() {
