@@ -1,0 +1,7 @@
+{
+  "web": {
+    "client_id": "273093979044-fahvptkbkfcrnp145452ddgj238jnavj.apps.googleusercontent.com",
+    "client_secret": "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",
+    "redirect_uris": ["http://localhost:3000/oauth2callback"]
+  }
+}

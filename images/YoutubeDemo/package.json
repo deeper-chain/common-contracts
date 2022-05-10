@@ -1,0 +1,10 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "dependencies": {
+    "@google-cloud/local-auth": "^1.0.1",
+    "axios": "^0.26.1",
+    "googleapis": "^100.0.0",
+    "ip": "^1.1.5"
+  }
+}

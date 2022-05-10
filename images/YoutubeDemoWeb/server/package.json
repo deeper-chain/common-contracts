@@ -1,0 +1,9 @@
+{
+  "name": "demo1",
+  "version": "1.0.0",
+  "dependencies": {
+    "googleapis": "^100.0.0",
+    "open": "^8.4.0",
+    "server-destroy": "^1.0.1"
+  }
+}

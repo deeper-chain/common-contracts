@@ -57,6 +57,10 @@ describe('deeperMachine integration test', function() {
     let tx = await DeeperMachine.raceSubIndexForTask(12,{gasLimit:5000000})
     await tx.wait()
   })
+  it('Should withdraw earnings', async function() {
+    let tx = await DeeperMachine.withdrawEarnings({ gasLimit: 5000000 })
+    await tx.wait()
+  })
   it('Should set a task', async function() {
     let tx = await DeeperMachine.publishTask('xxx', 'http://43.154.69.51:8080', 100, {
       value: ethers.utils.parseUnits('10', 'ether')
