@@ -41,7 +41,7 @@ describe('deeperMachine integration test', function() {
     console.log(`deployer.address:`, deployer.address)
     console.log(`deployer.balance:`, await deployer.getBalance())
   
-    DeeperMachine = await findOrDeploy('DeeperMachine')
+    DeeperMachine = await findOrDeploy.noVerify('DeeperMachine')
   })
   
   it('Should publish a task', async function() {
@@ -50,7 +50,7 @@ describe('deeperMachine integration test', function() {
       value: ethers.utils.parseUnits('10', 'ether')
     })
     await tx.wait()
-    tx = await DeeperMachine.raceSubIndexForTask(0, { gasLimit: 5000000 })
+    tx = await DeeperMachine.raceSubIndexForTask(1, { gasLimit: 5000000 })
     await tx.wait()
   })
   it('Should race a task', async function() {

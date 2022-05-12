@@ -6,6 +6,7 @@ contract DeeperMachine {
         uint64 currentRunNum;
         uint64 maxRunNum;
         uint64 startTime;
+        address[] receivers;
     }
 
     mapping(address => mapping(uint64 => bool)) public userTask;
@@ -17,7 +18,7 @@ contract DeeperMachine {
     mapping(address => uint64) public userSettledDay;
 
     event StressTestTask();
-    event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum);
+    event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum, address[] receivers);
     event RaceTask(address node, uint64 taskId);
 
     uint64 public taskSum = 0;
@@ -59,19 +60,31 @@ contract DeeperMachine {
         completeTimeout = _completeTimeout;
     }
 
-    function publishTask(string calldata url, string calldata options, uint64 maxRunNum) external payable checkBalance {
+    function publishTask(string calldata url, string calldata options, uint64 maxRunNum, address[] memory receivers) external payable checkBalance {
         taskSum = taskSum + 1;
         taskInfo[taskSum].maxRunNum = maxRunNum;
         taskInfo[taskSum].currentRunNum = 0;
         taskInfo[taskSum].startTime = uint64(block.timestamp);
+        taskInfo[taskSum].receivers = receivers;
 
-        emit TaskPublished(taskSum, url, options, maxRunNum);
+        emit TaskPublished(taskSum, url, options, maxRunNum, receivers);
     }
 
     function raceSubIndexForTask(uint64 taskId) external {
         require(taskSum >= taskId, "Invalid taskId");
         require(taskInfo[taskId].maxRunNum >= taskInfo[taskId].currentRunNum + 1, "Task has been filled");
         require(taskInfo[taskId].startTime + raceTimeout >= block.timestamp, "Task race has been expired");
+
+        if (taskInfo[taskId].receivers.length > 0) {
+            bool exists = false;
+            for (uint i = 0; i < taskInfo[taskId].receivers.length; i++) {
+                if (taskInfo[taskId].receivers[i] == msg.sender) {
+                    exists = true;
+                    break;
+                }
+            }
+            require(exists, "Invalid task receiver");
+        }
 
         require(!readSubIndexForTask(taskId), "Address already used");
 
