@@ -57,6 +57,10 @@ describe('deeperMachine integration test', function() {
     let tx = await DeeperMachine.raceSubIndexForTask(12,{gasLimit:5000000})
     await tx.wait()
   })
+  it('Should reset runners', async function() {
+    let tx = await DeeperMachine.resetRunners([])
+    await tx.wait()
+  })
   it('Should withdraw earnings', async function() {
     let tx = await DeeperMachine.withdrawEarnings({ gasLimit: 5000000 })
     await tx.wait()

@@ -20,6 +20,7 @@ contract DeeperMachine {
     event StressTestTask();
     event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum, address[] receivers);
     event RaceTask(address node, uint64 taskId);
+    event ResetRunners(address[] receivers);
 
     uint64 public taskSum = 0;
     address public owner;
@@ -68,6 +69,10 @@ contract DeeperMachine {
         taskInfo[taskSum].receivers = receivers;
 
         emit TaskPublished(taskSum, url, options, maxRunNum, receivers);
+    }
+
+    function resetRunners(address[] memory receivers) external{
+        emit ResetRunners(receivers);
     }
 
     function raceSubIndexForTask(uint64 taskId) external {
