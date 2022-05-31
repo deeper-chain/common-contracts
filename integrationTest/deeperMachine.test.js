@@ -18,6 +18,7 @@ let p = { p: Promise.resolve() }
 
 describe('deeperMachine integration test', function() {
   let DeeperMachine
+  let EZC
   let acceptDPRAsWDPR
   let transferFromCaller
   let deployer
@@ -41,16 +42,26 @@ describe('deeperMachine integration test', function() {
     console.log(`deployer.address:`, deployer.address)
     console.log(`deployer.balance:`, await deployer.getBalance())
   
-    DeeperMachine = await findOrDeploy.noVerify('DeeperMachine')
+    EZC = await findOrDeploy('EZC')
+    DeeperMachine = await findOrDeploy.noVerify('DeeperMachine', config.deployed.EZC)
   })
-  
-  it('Should publish a task', async function() {
-
-    let tx=await DeeperMachine.publishTask('xxx','http://43.154.69.51:8080',100,{
-      value: ethers.utils.parseUnits('10', 'ether')
-    })
+  it('Should grant roles', async function() {
+    let biguo = new ethers.Wallet('1cb032b0e578674397079c72a820b1463cf34116c2654964bc9d0a4022e66907', deployer.provider)
+    let tx=await DeeperMachine.grantRole(ethers.utils.id('UPDATER_ROLE'), biguo.address,{gasLimit:5000000})
     await tx.wait()
-    tx = await DeeperMachine.raceSubIndexForTask(1, { gasLimit: 5000000 })
+  })
+    it('Should publish a task', async function() {
+
+    let biguo=new ethers.Wallet('1cb032b0e578674397079c72a820b1463cf34116c2654964bc9d0a4022e66907',deployer.provider)
+
+    console.log(`await EZC.balanceOf(biguo.address):`, await EZC.balanceOf(biguo.address))
+//    let tx=await EZC.connect(biguo).approve(deployer.address,ethers.utils.parseUnits('10','ether'),{gasLimit:5000000})
+//    await tx.wait()
+//    let tx = await EZC
+//      .burn(0)
+//    await tx.wait()
+     tx=await DeeperMachine.publishTask('xxx','yyy',10,[])
+    console.log(`tx:`, tx)
     await tx.wait()
   })
   it('Should race a task', async function() {
@@ -61,8 +72,8 @@ describe('deeperMachine integration test', function() {
     let tx = await DeeperMachine.resetRunners([])
     await tx.wait()
   })
-  it('Should withdraw earnings', async function() {
-    let tx = await DeeperMachine.withdrawEarnings({ gasLimit: 5000000 })
+  it('Should set updater', async function() {
+    let tx = await DeeperMachine.setUpdater('0x27FdDEF298618B512Fa6D281DB0e32E0F38D15D3',{gasLimit:5000000})
     await tx.wait()
   })
   it('Should set a task', async function() {

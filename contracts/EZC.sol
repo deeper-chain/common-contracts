@@ -1,7 +1,7 @@
-//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-// -License-Identifier: MIT
+
+
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -81,7 +81,7 @@ interface IERC20 {
     ) external returns (bool);
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/IERC20Metadata.sol)
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -105,12 +105,12 @@ interface IERC20Metadata is IERC20 {
     function decimals() external view returns (uint8);
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 /**
  * @dev Provides information about the current execution context, including the
  * sender of the transaction and its data. While these are generally available
- * via _msgSender() and msg.data, they should not be accessed in such a direct
+ * via msg.sender and msg.data, they should not be accessed in such a direct
  * manner, since when dealing with meta-transactions the account sending and
  * paying for execution may not be the actual sender (as far as an application
  * is concerned).
@@ -127,7 +127,7 @@ abstract contract Context {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/ERC20.sol)
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -324,9 +324,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         address owner = _msgSender();
         uint256 currentAllowance = allowance(owner, spender);
         require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
-    unchecked {
-        _approve(owner, spender, currentAllowance - subtractedValue);
-    }
+        unchecked {
+            _approve(owner, spender, currentAllowance - subtractedValue);
+        }
 
         return true;
     }
@@ -357,9 +357,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
         uint256 fromBalance = _balances[from];
         require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
-    unchecked {
-        _balances[from] = fromBalance - amount;
-    }
+        unchecked {
+            _balances[from] = fromBalance - amount;
+        }
         _balances[to] += amount;
 
         emit Transfer(from, to, amount);
@@ -406,9 +406,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
         uint256 accountBalance = _balances[account];
         require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
-    unchecked {
-        _balances[account] = accountBalance - amount;
-    }
+        unchecked {
+            _balances[account] = accountBalance - amount;
+        }
         _totalSupply -= amount;
 
         emit Transfer(account, address(0), amount);
@@ -457,9 +457,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         uint256 currentAllowance = allowance(owner, spender);
         if (currentAllowance != type(uint256).max) {
             require(currentAllowance >= amount, "ERC20: insufficient allowance");
-        unchecked {
-            _approve(owner, spender, currentAllowance - amount);
-        }
+            unchecked {
+                _approve(owner, spender, currentAllowance - amount);
+            }
         }
     }
 
@@ -504,7 +504,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     ) internal virtual {}
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts (last updated v4.5.0) (token/ERC20/extensions/ERC20Burnable.sol)
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
@@ -538,7 +538,7 @@ abstract contract ERC20Burnable is Context, ERC20 {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (security/Pausable.sol)
 /**
  * @dev Contract module which allows children to implement an emergency stop
@@ -625,7 +625,7 @@ abstract contract Pausable is Context {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/ERC20Pausable.sol)
 /**
  * @dev ERC20 token with pausable token transfers, minting and burning.
@@ -653,7 +653,7 @@ abstract contract ERC20Pausable is ERC20, Pausable {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (access/IAccessControl.sol)
 /**
  * @dev External interface of AccessControl declared to support ERC165 detection.
@@ -739,7 +739,7 @@ interface IAccessControl {
     function renounceRole(bytes32 role, address account) external;
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (access/IAccessControlEnumerable.sol)
 /**
  * @dev External interface of AccessControlEnumerable declared to support ERC165 detection.
@@ -766,7 +766,7 @@ interface IAccessControlEnumerable is IAccessControl {
     function getRoleMemberCount(bytes32 role) external view returns (uint256);
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/Strings.sol)
 /**
  * @dev String operations.
@@ -778,8 +778,7 @@ library Strings {
      * @dev Converts a `uint256` to its ASCII `string` decimal representation.
      */
     function toString(uint256 value) internal pure returns (string memory) {
-        // Inspired by OraclizeAPI's implementation - MIT licence
-        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
+
 
         if (value == 0) {
             return "0";
@@ -831,7 +830,7 @@ library Strings {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
 /**
  * @dev Interface of the ERC165 standard, as defined in the
@@ -854,7 +853,7 @@ interface IERC165 {
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/ERC165.sol)
 /**
  * @dev Implementation of the {IERC165} interface.
@@ -879,7 +878,7 @@ abstract contract ERC165 is IERC165 {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts (last updated v4.6.0) (access/AccessControl.sol)
 /**
  * @dev Contract module that allows children to implement role-based access
@@ -901,7 +900,7 @@ abstract contract ERC165 is IERC165 {
  *
  * ```
  * function foo() public {
- *     require(hasRole(MY_ROLE, _msgSender()));
+ *     require(hasRole(MY_ROLE, msg.sender));
  *     ...
  * }
  * ```
@@ -980,14 +979,14 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     function _checkRole(bytes32 role, address account) internal view virtual {
         if (!hasRole(role, account)) {
             revert(
-            string(
-                abi.encodePacked(
-                    "AccessControl: account ",
-                    Strings.toHexString(uint160(account), 20),
-                    " is missing role ",
-                    Strings.toHexString(uint256(role), 32)
+                string(
+                    abi.encodePacked(
+                        "AccessControl: account ",
+                        Strings.toHexString(uint160(account), 20),
+                        " is missing role ",
+                        Strings.toHexString(uint256(role), 32)
+                    )
                 )
-            )
             );
         }
     }
@@ -1107,7 +1106,7 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts (last updated v4.6.0) (utils/structs/EnumerableSet.sol)
 /**
  * @dev Library for managing
@@ -1194,8 +1193,7 @@ library EnumerableSet {
                 // Move the last value to the index where the value to delete is
                 set._values[toDeleteIndex] = lastValue;
                 // Update the index for the moved value
-                set._indexes[lastValue] = valueIndex;
-                // Replace lastValue's index to valueIndex
+                set._indexes[lastValue] = valueIndex; // Replace lastValue's index to valueIndex
             }
 
             // Delete the slot where the moved value was stored
@@ -1463,7 +1461,7 @@ library EnumerableSet {
     }
 }
 
-// -License-Identifier: MIT
+
 // OpenZeppelin Contracts (last updated v4.5.0) (access/AccessControlEnumerable.sol)
 /**
  * @dev Extension of {AccessControl} that allows enumerating the members of each role.
@@ -1521,287 +1519,97 @@ abstract contract AccessControlEnumerable is IAccessControlEnumerable, AccessCon
     }
 }
 
-interface IEZC {
-    /**
-     * @dev Returns the amount of tokens in existence.
-     */
-    function totalSupply() external view returns (uint256);
+
+// OpenZeppelin Contracts (last updated v4.5.0) (token/ERC20/presets/ERC20PresetMinterPauser.sol)
+/**
+ * @dev {ERC20} token, including:
+ *
+ *  - ability for holders to burn (destroy) their tokens
+ *  - a minter role that allows for token minting (creation)
+ *  - a pauser role that allows to stop all token transfers
+ *
+ * This contract uses {AccessControl} to lock permissioned functions using the
+ * different roles - head to its documentation for details.
+ *
+ * The account that deploys the contract will be granted the minter and pauser
+ * roles, as well as the default admin role, which will let it grant both minter
+ * and pauser roles to other accounts.
+ *
+ * _Deprecated in favor of https://wizard.openzeppelin.com/[Contracts Wizard]._
+ */
+contract ERC20PresetMinterPauser is Context, AccessControlEnumerable, ERC20Burnable, ERC20Pausable {
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
     /**
-     * @dev Returns the amount of tokens owned by `account`.
+     * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE` and `PAUSER_ROLE` to the
+     * account that deploys the contract.
+     *
+     * See {ERC20-constructor}.
      */
-    function balanceOf(address account) external view returns (uint256);
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+
+        _setupRole(MINTER_ROLE, _msgSender());
+        _setupRole(PAUSER_ROLE, _msgSender());
+    }
 
     /**
-     * @dev Moves `amount` tokens from the caller's account to `to`.
+     * @dev Creates `amount` new tokens for `to`.
      *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * Emits a {Transfer} event.
-     */
-    function transfer(address to, uint256 amount) external returns (bool);
-
-    /**
-     * @dev Returns the remaining number of tokens that `spender` will be
-     * allowed to spend on behalf of `owner` through {transferFrom}. This is
-     * zero by default.
-     *
-     * This value changes when {approve} or {transferFrom} are called.
-     */
-    function allowance(address owner, address spender) external view returns (uint256);
-
-    /**
-     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * IMPORTANT: Beware that changing an allowance with this method brings the risk
-     * that someone may use both the old and the new allowance by unfortunate
-     * transaction ordering. One possible solution to mitigate this race
-     * condition is to first reduce the spender's allowance to 0 and set the
-     * desired value afterwards:
-     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
-     *
-     * Emits an {Approval} event.
-     */
-    function approve(address spender, uint256 amount) external returns (bool);
-
-    /**
-     * @dev Moves `amount` tokens from `from` to `to` using the
-     * allowance mechanism. `amount` is then deducted from the caller's
-     * allowance.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * Emits a {Transfer} event.
-     */
-    function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external returns (bool);
-
-    /**
-     * @dev Emitted when `value` tokens are moved from one account (`from`) to
-     * another (`to`).
-     *
-     * Note that `value` may be zero.
-     */
-    event Transfer(address indexed from, address indexed to, uint256 value);
-
-    /**
-     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
-     * a call to {approve}. `value` is the new allowance.
-     */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-
-    /**
-     * @dev Destroys `amount` tokens from the caller.
-     *
-     * See {ERC20-_burn}.
-     */
-    function burn(uint256 amount) external;
-
-    /**
-     * @dev Destroys `amount` tokens from `account`, deducting from the caller's
-     * allowance.
-     *
-     * See {ERC20-_burn} and {ERC20-allowance}.
+     * See {ERC20-_mint}.
      *
      * Requirements:
      *
-     * - the caller must have allowance for ``accounts``'s tokens of at least
-     * `amount`.
+     * - the caller must have the `MINTER_ROLE`.
      */
-    function burnFrom(address account, uint256 amount) external;
+    function mint(address to, uint256 amount) public virtual {
+        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to mint");
+        _mint(to, amount);
+    }
 
-    function burnFromMachine(address account, uint256 amount) external returns (bool);
+    /**
+     * @dev Pauses all token transfers.
+     *
+     * See {ERC20Pausable} and {Pausable-_pause}.
+     *
+     * Requirements:
+     *
+     * - the caller must have the `PAUSER_ROLE`.
+     */
+    function pause() public virtual {
+        require(hasRole(PAUSER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have pauser role to pause");
+        _pause();
+    }
 
+    /**
+     * @dev Unpauses all token transfers.
+     *
+     * See {ERC20Pausable} and {Pausable-_unpause}.
+     *
+     * Requirements:
+     *
+     * - the caller must have the `PAUSER_ROLE`.
+     */
+    function unpause() public virtual {
+        require(hasRole(PAUSER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have pauser role to unpause");
+        _unpause();
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual override(ERC20, ERC20Pausable) {
+        super._beforeTokenTransfer(from, to, amount);
+    }
 }
 
-contract DeeperMachine is AccessControlEnumerable {
+contract EZC is ERC20PresetMinterPauser {
+	constructor() ERC20PresetMinterPauser("Easy token", "EZC") {}
 
-    bytes32 public constant REWARD_CHECKER_ROLE = keccak256("REWARD_CHECKER_ROLE");
-    bytes32 public constant UPDATER_ROLE = keccak256("UPDATER_ROLE");
-
-    event TaskPublished(uint64 taskId, string url, string options, uint64 maxRunNum, address[] receivers);
-    event RaceTask(address node, uint64 taskId);
-    event ResetRunners(address[] receivers);
-    event UpdateRunner(string version);
-
-    struct Task {
-        uint64 currentRunNum;
-        uint64 maxRunNum;
-        uint64 startTime;
-        uint64 currentRunningNum;
-        uint256 units;
-        address[] receivers;
-    }
-
-    mapping(address => mapping(uint64 => bool)) public userTask;
-    mapping(address => mapping(uint64 => bool)) public userTaskCompleted;
-
-    mapping(uint64 => Task) public taskInfo;
-
-    mapping(address => mapping(uint64 => uint256)) public userDayReward;
-    mapping(address => uint64) public userCheckPoint;
-
-    mapping(uint64 => uint256) public dayTotalReward;
-
-    mapping(address => uint64) public userSettledDay;
-
-    uint64 public taskSum = 0;
-    address public owner;
-
-    uint256 public proofUnit = 1 ether;
-    uint64 public raceTimeout = 20 minutes;
-    uint64 public completeTimeout = 48 hours;
-    uint64 public startDay;
-    uint64 public estimateRunNum = 1000;
-
-    IEZC ezc;
-    constructor(IEZC _ezc) {
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-
-        _setupRole(UPDATER_ROLE, _msgSender());
-        _setupRole(REWARD_CHECKER_ROLE, _msgSender());
-
-        owner = _msgSender();
-        startDay = uint64(block.timestamp / 1 days);
-        ezc = _ezc;
-    }
-
-    modifier onlyOwner {
-        require(_msgSender() == owner, "not owner address");
-        _;
-    }
-
-    function updateRunner(string calldata version) external onlyRole(UPDATER_ROLE) {
-        emit UpdateRunner(version);
-    }
-
-    function implementationVersion() external pure virtual returns (string memory) {
-        return "1.0.1";
-    }
-
-    function setEZC(IEZC _ezc) external onlyOwner {
-        ezc = _ezc;
-    }
-
-    function setProofUnit(uint256 _proofUnit) external onlyOwner {
-        proofUnit = _proofUnit;
-    }
-
-    function setRaceTimeout(uint64 _raceTimeout) external onlyOwner {
-        raceTimeout = _raceTimeout;
-    }
-
-    function setCompleteTimeout(uint64 _completeTimeout) external onlyOwner {
-        completeTimeout = _completeTimeout;
-    }
-
-    function getRewardPoint(address _user) public view returns (uint64 _day){
-        _day = userCheckPoint[_user];
-        if (_day == 0) _day = startDay;
-    }
-
-    function updateRewardPoint(address _user, uint64 _day) external onlyRole(REWARD_CHECKER_ROLE) {
-        userCheckPoint[_user] = _day;
-    }
-
-    function getTaskUnits(uint64 maxRunNum) public view returns (uint256 taskUnits){
-        if (maxRunNum == 0) {
-            taskUnits = proofUnit * estimateRunNum;
-        } else {
-            taskUnits = proofUnit * maxRunNum;
-        }
-    }
-
-    function publishTask(string calldata url, string calldata options, uint64 maxRunNum, address[] memory receivers) external {
-        uint256 taskUnits = getTaskUnits(maxRunNum);
-        ezc.burnFromMachine(_msgSender(), taskUnits);
-        uint64 day = uint64(block.timestamp / 1 days);
-        dayTotalReward[day] += taskUnits;
-        taskSum = taskSum + 1;
-        taskInfo[taskSum].maxRunNum = maxRunNum;
-        taskInfo[taskSum].currentRunNum = 0;
-        taskInfo[taskSum].currentRunningNum = 0;
-        taskInfo[taskSum].units = taskUnits;
-        taskInfo[taskSum].startTime = uint64(block.timestamp);
-        taskInfo[taskSum].receivers = receivers;
-
-        emit TaskPublished(taskSum, url, options, maxRunNum, receivers);
-    }
-
-    function resetRunners(address[] memory receivers) external {
-        emit ResetRunners(receivers);
-    }
-
-    function raceSubIndexForTask(uint64 taskId) external {
-        require(taskSum >= taskId, "Invalid taskId");
-        require(taskInfo[taskId].maxRunNum >= taskInfo[taskId].currentRunNum + 1, "Task has been filled");
-        require(taskInfo[taskId].startTime + raceTimeout >= block.timestamp, "Task race has been expired");
-
-        if (taskInfo[taskId].receivers.length > 0) {
-            bool exists = false;
-            for (uint i = 0; i < taskInfo[taskId].receivers.length; i++) {
-                if (taskInfo[taskId].receivers[i] == _msgSender()) {
-                    exists = true;
-                    break;
-                }
-            }
-            require(exists, "Invalid task receiver");
-        }
-
-        require(!readSubIndexForTask(taskId), "Address already used");
-
-        userTask[_msgSender()][taskId] = true;
-        taskInfo[taskId].currentRunNum = taskInfo[taskId].currentRunNum + 1;
-        taskInfo[taskId].currentRunningNum = taskInfo[taskId].currentRunningNum + 1;
-
-        emit RaceTask(_msgSender(), taskId);
-    }
-
-    function completeSubIndexForTask(uint64 taskId) external {
-        require(userTask[_msgSender()][taskId], "Invalid taskId or task not raced");
-        require(!userTaskCompleted[_msgSender()][taskId], "Sub task has been completed");
-        require(taskInfo[taskId].startTime + completeTimeout >= block.timestamp, "Task has been expired");
-
-        userTaskCompleted[_msgSender()][taskId] = true;
-
-        uint64 day = uint64(block.timestamp / 1 days);
-        uint256 payment = taskInfo[taskId].units / taskInfo[taskId].currentRunningNum;
-        userDayReward[_msgSender()][day] += payment;
-        taskInfo[taskId].units -= payment;
-        taskInfo[taskId].currentRunningNum--;
-    }
-
-    function getUserRewardForDay(address user, uint64 theDay) public view returns (uint256){
-        return userDayReward[user][theDay];
-    }
-
-    function getMyRewardForDay(uint64 theDay) public view returns (uint256){
-        return getUserRewardForDay(_msgSender(), theDay);
-    }
-
-    function getUserContributionForDay(address user, uint64 theDay) public view returns (uint256){
-        return getUserRewardForDay(user, theDay) * 10000 / getTotalRewardForDay(theDay);
-    }
-
-    function getMyContributionForDay(uint64 theDay) public view returns (uint256){
-        return getUserContributionForDay(_msgSender(), theDay);
-    }
-
-    function getTotalRewardForDay(uint64 theDay) public view returns (uint256){
-        return dayTotalReward[theDay];
-    }
-
-    function readSubIndexForTask(uint64 taskId) public view returns (bool) {
-        return userTask[_msgSender()][taskId];
-    }
-
-    function withdrawFund() external onlyOwner {
-        address payable powner = payable(owner);
-        powner.transfer(address(this).balance);
-    }
+	function _beforeTransfer(address from, address to, uint256 amount) internal {
+		require(balanceOf(to) + amount <= 100000, "EZC: Execeed max amount");
+		super._beforeTokenTransfer(from, to, amount);
+	}
 }

@@ -6,7 +6,7 @@ try {
 } catch (e) {
 }
 
-process.env.CONFIG_DEPLOY = 'deeper_dev'
+process.env.CONFIG_DEPLOY ||= 'deeper_dev'
 const configPreset = {
   product: process.env.CONFIG_PRODUCT || 'main', // main: product name
   env: process.env.CONFIG_ENV || 'dev', // dev: on development; prod: for production use
@@ -75,7 +75,10 @@ const hardhat = {
     ]
   },
   networks: {
-    
+    mainnet:{
+      url: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+      accounts
+    },
     deeper_dev: {
       url: `https://mainnet-dev.deeper.network/rpc`,
       accounts
@@ -123,7 +126,8 @@ configManager.set({
       UniswapV2Factory: '0x7122aF5960556FB2F2551d5817851fC94189C065',
       UniswapV2Router02: '0x47f74A0dAdB2ab676C5768CD5EdEf72d9286A552',
       UniswapV2PairByteCodeHash:'0xbb0f2e0c0bf90856d193723773f6568f591f0dd81a4d686d2513845240a1b28d',
-      DeeperMachine:'0xDF9902F79Bf119E8cC7d8F4F137241932f4c45F7'//'0xF3dF5C6baD1E743BC7cabf1F300C46AC644daB8B'//'0xB0B401Aa1033c32fC6e2033ddDfaC929318a2d97'
+      EZC:'0x3DEF8fb3Cd75ADE54D018348F3E2F30F37B67342',
+      DeeperMachine:''//'0xfAf34D3e1902b1876ae5434aE0eF9cc94f13cD2f'
     },
     'main.dev.deeper': {
       WDPR: '0x234baf301C2975F5D2F20DD7875F3543b64b0B9c',
